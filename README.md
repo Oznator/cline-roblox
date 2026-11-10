@@ -1,3 +1,16 @@
+# Cline Roblox
+
+An independent Cline fork with a Roblox prototyping command for VS Code.
+
+1. Build the extension from source with Bun and Node using the [Cline contributor setup](CONTRIBUTING.md). From the repository root, run `bun install --frozen-lockfile` and `bun run build:sdk`. Then, from `apps/vscode`, run `bun run build:webview` and `bun esbuild.mjs`.
+2. Open your Roblox project in a VS Code development host using `code --extensionDevelopmentPath="<absolute path to apps/vscode>" "<absolute path to your Roblox project>"`. Use one trusted folder. For a new game, start with an empty folder.
+3. Configure a model provider in Cline and select **Act** mode. Run **Cline: Roblox: Build a Random Game** from the Command Palette.
+4. Leave the seed blank for a new idea or enter a previous seed to reproduce its brief. Review the preview and choose **Start build task**. Cline implements the prototype through its normal approval flow. The seed reproduces the brief, while the model's implementation can vary.
+
+For an existing game or your own concept, copy [the Roblox build workflow](.clinerules/workflows/roblox-build.md) and [the game quality guide](docs/roblox-game-quality.md) into the same paths in your game workspace. Run the `roblox-build.md` workflow from Cline's chat. The guide covers backgrounds and visual readability, mobile controls, server authority, performance, and playtest evidence.
+
+---
+
 <p align="center">
   <img src="assets/icons/icon.png" width="80" alt="Cline" />
 </p>

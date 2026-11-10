@@ -51,6 +51,7 @@ import { EDIT_PREVIEW_URI_SCHEME, editPreviewContentProvider, VscodeEditPreview 
 import { VscodeWebviewProvider } from "./hosts/vscode/VscodeWebviewProvider"
 import { exportVSCodeStorageToSharedFiles } from "./hosts/vscode/vscode-to-file-migration"
 import { ExtensionRegistryInfo } from "./registry"
+import { generateRobloxGameBrief } from "./roblox/gameBrief"
 import { AuthService, LogoutReason } from "./sdk/auth-service"
 import { telemetryService } from "./services/telemetry"
 import type { RolloutBundleActivation } from "./services/telemetry/rollout-metadata"
@@ -129,6 +130,51 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// NOTE: Commands must be added to the internal registry before registering them with VSCode
 	const { commands } = ExtensionRegistryInfo
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand(commands.BuildRandomRobloxGame, async () => {
+			if (vscode.workspace.workspaceFolders?.length !== 1 || !vscode.workspace.isTrusted) {
+				await vscode.window.showWarningMessage("Open a single trusted Roblox project folder to build a game.")
+				return
+			}
+
+			const seed = await vscode.window.showInputBox({
+				title: "Roblox game seed",
+				prompt: "Leave blank to generate a new idea, or enter a seed to replay one.",
+				validateInput: (value) =>
+					/^[a-zA-Z0-9_-]{0,64}$/.test(value) ? undefined : "Use up to 64 letters, digits, underscores or hyphens.",
+			})
+			if (seed === undefined) {
+				return
+			}
+
+			const brief = generateRobloxGameBrief(seed || undefined)
+			const build = "Start build task"
+			const choice = await vscode.window.showWarningMessage(
+				"Start a new Cline task for this Roblox game?",
+				{ modal: true, detail: brief },
+				build,
+			)
+			if (choice !== build) {
+				return
+			}
+
+			const sidebar = await showWebview(false)
+			await createClineAPI(sidebar.controller).startNewTask(
+				[
+					"Build a playable Roblox prototype from the brief below in the open workspace.",
+					"Use Act mode for implementation and follow the normal Cline approval flow.",
+					"Inspect the workspace first. Preserve existing work and use a new subfolder for an unrelated project.",
+					"Use Luau and the existing project stack. For an empty project, create a Rojo project with separate server and client code.",
+					"Implement a full playable loop with onboarding, feedback, and restart. Give the map a coherent background, readable landmarks, and visual contrast.",
+					"Support touch and keyboard, validate multiplayer actions on the server, and test with two clients if Studio is available.",
+					"Use the Roblox quality guide in the workspace if present. Run available checks and record which still require Studio or a device.",
+					"Save the brief and local build/playtest instructions with the prototype. Keep it local.",
+					brief,
+				].join("\n\n"),
+			)
+		}),
+	)
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand(commands.PlusButton, async () => {

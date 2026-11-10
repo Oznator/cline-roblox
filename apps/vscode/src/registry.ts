@@ -10,6 +10,7 @@ const prefix = name === "claude-dev" ? "cline" : name
  * In production, all commands are registered under "cline" for consistency.
  */
 const ClineCommands = {
+	BuildRandomRobloxGame: prefix + ".buildRandomRobloxGame",
 	PlusButton: prefix + ".plusButtonClicked",
 	McpButton: prefix + ".mcpButtonClicked",
 	MarketplaceButton: prefix + ".marketplaceButtonClicked",
