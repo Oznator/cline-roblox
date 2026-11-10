@@ -9,6 +9,18 @@ An independent Cline fork with a Roblox prototyping command for VS Code.
 
 For an existing game or your own concept, copy [the Roblox build workflow](.clinerules/workflows/roblox-build.md) and [the game quality guide](docs/roblox-game-quality.md) into the same paths in your game workspace. Run the `roblox-build.md` workflow from Cline's chat. The guide covers backgrounds and visual readability, mobile controls, server authority, performance, and playtest evidence.
 
+### Continuous Roblox factory
+
+After installing dependencies, building the SDK, and configuring a CLI model provider (see [Cline CLI](apps/cli/README.md)), run from the repository root:
+
+```sh
+bun run roblox:factory "<output-directory>"
+```
+
+The factory runs until you press Ctrl+C. To limit it to three attempts, add `3` after the directory. It generates a brief and starts an unattended Cline build in a fresh folder for each attempt, with a 30-minute CLI timeout and a retry delay that grows after failures. Each run records the CLI exit status in `FACTORY_RUN.json`. Check the project's own README and test notes for playability evidence.
+
+This mode enables automatic tool approval and can incur model charges. Run it in an environment dedicated to this work. The agent is instructed to keep projects local and use the selected folder for its work.
+
 ---
 
 <p align="center">
