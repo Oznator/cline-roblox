@@ -41,7 +41,19 @@ for (let attempt = 0; attempt < limit && !shutdown.signal.aborted; attempt++) {
 
 	console.log(`Starting Roblox build in ${folder}`)
 	activeRun = Bun.spawn(
-		[process.execPath, "--conditions=development", "src/index.ts", "--yolo", "--cwd", folder, "--timeout", "1800", prompt],
+		[
+			process.execPath,
+			"--conditions=development",
+			"src/index.ts",
+			"--provider",
+			"openai",
+			"--yolo",
+			"--cwd",
+			folder,
+			"--timeout",
+			"1800",
+			prompt,
+		],
 		{
 			cwd: import.meta.dir,
 			env: { ...process.env, CLINE_BUILD_ENV: "development" },

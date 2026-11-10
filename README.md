@@ -11,7 +11,9 @@ For an existing game or your own concept, copy [the Roblox build workflow](.clin
 
 ### Continuous Roblox factory
 
-After installing dependencies, building the SDK, and configuring a CLI model provider (see [Cline CLI](apps/cli/README.md)), run from the repository root:
+After installing dependencies and building the SDK, open **Cline → Settings → API Provider → OpenAI Compatible**. Enter your **Base URL** and **API Key**, and select a model exposed by that endpoint. The factory uses the shared OpenAI-compatible provider settings from Cline and does not require a Cline account.
+
+Run from the repository root:
 
 ```sh
 bun run roblox:factory "<output-directory>"
